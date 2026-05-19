@@ -3,3 +3,5 @@ python3 -m venv venv
 source venv/bin/activate
 
 uvicorn main:app --reload
+
+4 урок можно спросить про БД закрперить весь пройденный материал и дать контрольную работу
