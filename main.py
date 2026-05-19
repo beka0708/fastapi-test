@@ -1,52 +1,44 @@
 from fastapi import FastAPI
+from fastapi import HTTPException
+
+from schema import TaskCreate, TaskResponse
 
 app = FastAPI()
 
-# Список задач
-tasks = [
-    {
-        "id": 1,
-        "title": "Купить продукты",
-        "completed": True
-    },
-    {
-        "id": 2,
-        "title": "Сходить на курсы",
-        "completed": False
-    },
-]
+tasks: list[TaskResponse] = []
+counter = 1
 
 
-# Вызов: GET /tasks?completed=true
-# Query-параметр: /tasks?completed=true — опциональный, фильтр
-@app.get("/tasks")
-def get_tasks(completed: bool = None):
-    """Запрос на получение задач"""
-    if completed is None:
-        return tasks
-    return [t for t in tasks if t['completed'] == completed]
+# GET список
+@app.get('/tasks', response_model=list[TaskResponse])
+def get_tasks():
+    return tasks
 
 
-# Вызов: GET /tasks/2
-# Path-параметр: /tasks/{id} — обязательный, часть пути
-@app.get('/tasks/{task_id}')
+# GET по id
+@app.get('/tasks/{task_id}', response_model=TaskResponse)
 def get_task(task_id: int):
-    "Запрос на получение одной задачи по ID"
     for task in tasks:
-        if task["id"] == task_id:
+        if task.id == task_id:
             return task
-    return {"error": 'Задача не найдена'}       # Пока что без HTTPException
+    raise HTTPException(status_code=404, detail='Задача не найдена')
 
 
+# POST создать
+@app.post('/tasks', response_model=TaskResponse, status_code=201)
+def create_task(data: TaskCreate):
+    global counter
+    task = TaskResponse(id=counter, title=data.title, completed=data.done)
+    tasks.append(task)
+    counter += 1
+    return task
 
-@app.post("/task")
-def create_task(title: str):
-    """Запрос на создание задачи"""
-    new_task = {
-        'id': len(tasks) + 1,
-        'title': title,
-        'completed': False
-    }
-    tasks.append(new_task)
-    return new_task
 
+# DELETE удалить
+@app.delete('/tasks/{task_id}', status_code=204)
+def delete_task(task_id: int):
+    for i, task in enumerate(tasks):
+        if task.id == task_id:
+            tasks.pop(i)
+            return
+    raise HTTPException(status_code=404, detail='Задача не найдена')
