@@ -38,3 +38,4 @@ def delete_task(task_id: int):
     if not task:
         raise HTTPException(status_code=404, detail='Задача не найдена')
     crud.delete_task(task_id)
+

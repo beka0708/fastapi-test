@@ -11,7 +11,7 @@ def get_all_tasks():
 
 def get_task_by_id(task_id: int):
     conn = get_connection()
-    task = conn.execute(queries.select_task_id, (task_id,)).fetchone()
+    task = conn.execute(queries.select_task_by_id, (task_id,)).fetchone()
     conn.close()
     return dict(task) if task else None
 

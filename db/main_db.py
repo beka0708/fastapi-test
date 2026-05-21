@@ -7,6 +7,7 @@ DATABASE = 'db/todo.db'
 def get_connection():
     conn = sqlite3.connect(DATABASE)
     conn.row_factory = sqlite3.Row        # возвращает строки как словари
+    conn.execute('PRAGMA foreign_keys = ON')  # SQLite не включает FK по умолчанию
     return conn
 
 

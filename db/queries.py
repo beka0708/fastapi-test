@@ -31,9 +31,27 @@ create_table_tasks = """
 """
 
 
-select_all_tasks = 'SELECT * FROM tasks'
+select_all_tasks = """
+        SELECT t.id, t.title, t.done,
+            p.title AS project_name
+            FROM tasks t
+            INNER JOIN projects p ON t.project_id = p.id
+"""
 
-select_task_id = 'SELECT * FROM tasks WHERE id = ?'
+select_task_by_id = """
+    SELECT t.id, t.title, t.done, p.title AS project_name
+    FROM tasks t
+    INNER JOIN projects p ON t.project_id = p.id
+    WHERE t.id = ?
+"""
+
+select_all_users = 'SELECT * FROM users'
+select_user_by_id = 'SELECT * FROM users WHERE id = ?'
+insert_user = 'INSERT INTO users (name, email) VALUES (?, ?)'
+
+select_all_projects = 'SELECT * FROM projects'
+select_project_by_id = 'SELECT * FROM projects WHERE id = ?'
+insert_project = 'INSERT INTO projects (title, user_id) VALUES (?, ?)'
 
 insert_task = 'INSERT INTO tasks (title, done, project_id) VALUES (?, 0, ?)'
 
