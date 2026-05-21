@@ -1,5 +1,4 @@
 from pydantic import BaseModel, Field
-from typing import Optional
 
 
 class TaskCreate(BaseModel):          # схема для входящего запроса
@@ -8,10 +7,12 @@ class TaskCreate(BaseModel):          # схема для входящего з�
         max_length=100,
         description='Название задачи'   # появится в Swagger
     )
-    done: bool = Field(default=False)   # значение по умолчанию
+    done: bool = Field(default=False)
+    project_id: int
 
 
 class TaskResponse(BaseModel):        # схема для ответа
     id: int
     title: str
-    completed: bool
+    done: bool
+    project_id: int

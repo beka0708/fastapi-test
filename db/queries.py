@@ -30,3 +30,13 @@ create_table_tasks = """
         )
 """
 
+
+select_all_tasks = 'SELECT * FROM tasks'
+
+select_task_id = 'SELECT * FROM tasks WHERE id = ?'
+
+insert_task = 'INSERT INTO tasks (title, done, project_id) VALUES (?, 0, ?)'
+
+update_task = 'UPDATE tasks SET title = ?, done = ? WHERE id = ?'
+
+delete_task = 'DELETE FROM tasks WHERE id = ?'
